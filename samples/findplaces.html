@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="description" content="Quick Start JS"/>
+		<meta name="author" content="Allan Laframboise"/>
+        <title>Places</title>
+        <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.2/js/esri/css/esri.css" />
+        <link rel="stylesheet" href="samples.css" />
+        <!--link rel="stylesheet" href="/css/bootstrap.css" /-->
+        <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2compact"></script>
+        <script type="text/javascript" src="../src/esriquickstart.js"></script>
+
+        <script type="text/javascript">
+            var map;
+			var geocodeService;
+
+            function init() {
+                // Create map
+                map = new esri.Map("mapDiv", { basemap: esri.arcgisonline.basemaps.STREETS});
+                map.centerAtLatLon(35,-95, 3);
+                map.addListener("onClick", onClickFindAddressCallback);
+                // Create geoservice
+				geocodeService = new esriqs.arcgisonline.GeocodeService();
+            }
+
+            function findPlaces(place) {
+                var placeFilter = document.getElementById('placeFilter').value;
+                var searchExtent;
+
+                if (document.getElementById('useMapExtent').checked)
+                    searchExtent = map.extent;
+                
+                // Set place options
+                var searchOptions = { place: place,  // e.g. Redlands, 380 New York St, Starbucks...
+                    placeType: placeFilter,  // e.g. Coffee Shop, Gas Station, Shopping...
+                    searchExtent: searchExtent  // if null, it will search the global database
+                }
+
+				geocodeService.findPlaces(searchOptions, geocodeResults, geocodeErrorHandler);
+                setStyle("progress", "progress visible");
+		    }
+
+		    function onClickFindAddressCallback(evt) {
+		        var filter = document.getElementById('placeFilter').value;
+		        if (filter != "---")
+		            geocodeService.findPlaces({ place: filter, searchExtent: map.extent }, geocodeResults, geocodeErrorHandler);
+		        else
+		            geocodeService.findAddressFromPoint({ mapPoint: evt.mapPoint }, geocodeResults, geocodeErrorHandler);
+		    }
+
+		    function geocodeResults(places) {
+		        setStyle("progress", "progress hidden");
+		        if (places.length > 0) {
+		            clearFindGraphics();
+
+		            for (var i = 0; i < places.length; i++) {
+		                var place = places[i];
+		                var lat = place.point.getLatitude(5);
+		                var lon = place.point.getLongitude(5);
+		                map.graphics.addPoint(place.point, { title: "<b>Geocode Result</b>",
+		                    content: place.address + "<br/>Lat/Lon: " + lat + "," + lon +
+                           "<br/>Place Type: " + place.placeType + "<br/>Address Type: " + place.addressType + "<br/> Score: "
+                            + place.score + "<span class='popupZoom' onclick='zoomToPlace(" + lat + "," + lon + ",15)';>Zoom To</span>",
+		                    symbol: map.defaultSymbols.Geolocation,
+		                    attributes: { "ID": "PlacesGraphicID"}
+		                });
+		            }
+
+		            zoomToPlaces(places);
+
+		        } else {
+		            alert("Sorry, address or place not found.");
+		        }
+		    }
+
+		    function geocodeErrorHandler(errorInfo) {
+		        setStyle("progress", "progress hidden");
+		        alert("Sorry, address not found!");
+		    }
+
+		    function zoomToPlaces(places) {
+		        var multiPoint = new esri.geometry.Multipoint();
+		        for (var i = 0; i < places.length; i++) {
+		            multiPoint.addPoint(places[i].point);
+		        }
+		        map.setExtent(multiPoint.getExtent().expand(2.0));
+		    }
+
+            function zoomToPlace(lat,lon,scale) {
+                map.centerAtLatLon(lat,lon, scale);
+            }
+
+            function clearFindGraphics() {
+                map.graphics.removeByAttribute('ID', 'PlacesGraphicID');
+                map.graphics.clearAll(true);
+            }
+
+            function setStyle(element, className) {
+                element.className = className;
+            }
+
+		dojo.addOnLoad(init);	
+	</script>
+
+</head>
+<body>
+       <div id="mapDiv"></div>
+        <div id="bottomPanel">
+            <div id="messagePanel"><span id="message">Enter an address or click the map</span></div>
+            <div id="buttonPanel"> 
+                <div id="groupPanel">
+                <div id="inputControls">
+                      <label>Place:<input id="placeInput" class="textInput" type="text" value="San Diego, CA"/></label>
+                      <label>Type:
+                            <select id="placeFilter" class="selectInput" size="0">
+                                <option selected="selected">---</option>
+                                <option>Coffee Shops</option>
+                                <option>Restaurants</option>
+                                <option>Gas Stations</option>
+                                <option>Grocery Store</option>
+                                <option>Shopping</option>
+                                <option>Hotels</option>
+                            </select>
+                        </label>
+                        <label><input id="useMapExtent" type="checkbox" />In Map</label> 
+                        <button class="btn" id="search" onclick="findPlaces(document.getElementById('placeInput').value);">Go</button>
+                        <button class="btn btn-clear" id="clear" onclick="clearFindGraphics();">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="progress" class="progress hidden"><img alt="" src="../assets/img/progress.gif"/></div>
+      
+    </body>
+</html>

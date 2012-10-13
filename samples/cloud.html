@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="description" content="Quick Start JS"/>
+		<meta name="author" content="Allan Laframboise"/>
+        <title>Cloud</title>
+        <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.2/js/esri/css/esri.css" />
+        <link rel="stylesheet" href="samples.css" />
+        <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2compact"></script>
+        <script type="text/javascript" src="../src/esriquickstart.js"></script>
+  
+        <script type="text/javascript">
+            var map;
+            var geometryService;
+
+            function init() {
+                // Create map
+                map = new esri.Map("mapDiv", { basemap: esri.arcgisonline.basemaps.STREETS });
+                map.centerAtLatLon(43.55, -79.4, 3);
+                map.addListener("onClick", onClickSelectByDistanceCallback);
+                // Create geoservice
+				geometryService = new esriqs.arcgisonline.GeometryService();
+            }
+     
+            var graphicsLayer;
+            var featureLayer;
+
+            function setActiveTool(ctrl) {
+                setMessage("Click the map to search by distance");
+            }
+
+            function loadLayers() {
+                // Cloud feature service
+                if (graphicsLayer && featureLayer) {
+                    map.centerAtLatLon(35, -95, 4);
+                    return;
+                }
+
+                setStyle("progress", "in-progress visible");
+
+                // Add graphics layer for search circle
+                graphicsLayer = new esri.layers.GraphicsLayer();
+                map.addLayer(graphicsLayer);
+
+                // Add feature layer
+                featureLayer = new esri.layers.FeatureLayer("http://services.arcgis.com/oKgs2tbjK6zwTdvi/arcgis/rest/services/Major_World_Cities/FeatureServer/0", {
+                    mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+                    outFields: ["*"],
+                    opacity: .90,
+                    infoTemplate: new esri.InfoTemplate("Feature Attributes", "${*}")
+                });
+                featureLayer.setDefinitionExpression("");
+                featureLayer.renderer = new esri.renderer.SimpleRenderer(map.defaultSymbols.Geolocation);
+
+                map.addLayer(featureLayer);
+
+                // Zoom
+                map.centerAtLatLon(35, -95, 4);
+
+                setStyle("progress", "in-progress hide");
+            }
+
+            function searchBySQL() {
+                if (!graphicsLayer || !featureLayer)
+                    return;
+
+                var sql = document.getElementById('sqlInput').value;
+                featureLayer.setDefinitionExpression(sql);
+            }
+
+            function onClickSelectByDistanceCallback(evt) {
+                if (!graphicsLayer || !featureLayer)
+                    return;
+
+                setStyle("progress", "in-progress visible");
+
+                var options = { point: evt.mapPoint,
+                    distance: document.getElementById('searchByDistanceInput').value,
+                    units: esri.tasks.GeometryService.UNIT_STATUTE_MILE
+                }
+                // Get search circle and select features
+                geometryService.getCircle(options, function (geometries) {
+                    if (geometries.length > 0) {
+                        var area = geometries[0];
+                        graphicsLayer.removeByAttribute("ID", "SEARCHAREA");
+                        var options = { title: "Search Circle", content: "Points: " + (area.rings[0].length - 1), attributes: { "ID": "SEARCHAREA"} };
+                        graphicsLayer.addPolygon(area, options);
+
+                        //featureLayer.setDefinitionExpression("");  // Show all
+
+                        var query = new esri.tasks.Query();  // Select by shape
+                        query.geometry = area;
+                        featureLayer.setSelectionSymbol(map.defaultSymbols.Stop);
+                        featureLayer.selectFeatures(query, esri.layers.FeatureLayer.SELECTION_NEW);
+                    }
+                    setStyle("progress", "in-progress hide");
+                },
+                    function (err) {
+                        console.log(Error);
+                        setStyle("progress", "in-progress hide");
+                    });
+            }
+
+            function selectAll() {
+                loadLayers();
+                featureLayer.setDefinitionExpression("");
+            }
+
+            function clearCloudGraphics() {
+                if (!graphicsLayer || !featureLayer) return;
+
+                featureLayer.setDefinitionExpression("1=0");
+                featureLayer.selectFeatures(null, esri.layers.FeatureLayer.SELECTION_NEW);
+
+                graphicsLayer.clearAll(true);
+                setActiveTool("clear");
+
+                setStyle("progress", "in-progress hide");
+            }
+
+
+            function setMessage(msg) {
+                var element = document.getElementById("message");
+                element.innerHTML = msg;
+            } 
+            
+            function setStyle(element, className) {
+                element.className = className;
+            }
+
+            dojo.addOnLoad(init);	
+	</script>
+
+</head>
+<body>
+        <div id="mapDiv"></div>
+        <div id="bottomPanel">
+            <div id="messagePanel"><span id="message">Add data and then choose a search type</span></div>
+            <div id="buttonPanel"> 
+                <div id="groupPanel">
+                <div id="inputControls">
+                      <button class="btn" id="addData" onclick="selectAll();">Add Data</button>
+                      <label>SQL:<input id="sqlInput" class="textInput" type="text" value="COUNTRY = 'US'"/></label>
+                      <button class="btn" id="sqlSearch" onclick="searchBySQL();">SQL Filter</button>
+                      <label>Distance:
+                             <select id="searchByDistanceInput" class="selectInput" value="500" size="0">
+                                  <option>10</option>
+                                  <option>100</option>
+                                  <option selected="selected">500</option>
+                                  <option>1000</option>
+                            </select>
+                        </label>
+                        <button class="btn" id="searchByDistance" onclick="setActiveTool(this); onClickSelectByDistanceCallback({mapPoint:map.extent.getCenter()});">Map Search</button>
+                        <button class="btn btn-clear" id="clear" onclick="clearCloudGraphics();">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="progress" class="progress hidden"><img alt="" src="../assets/img/progress.gif"/></div>
+    </body>
+</html>

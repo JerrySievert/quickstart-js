@@ -1,0 +1,327 @@
+﻿/* Quick Start App CSS
+-------------------------------------------------- */
+/*** Author: Allan Laframboise (alaframboise@esri.com)
+/*** Date: 10/13/2012 ***/
+
+body 
+{
+    margin-left:0;
+    margin-right:0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.map-container 
+{
+    padding: 10px;
+    background-color: #EEE;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+}
+
+.column-container 
+{
+    padding: 10px;
+    background-color: #EEE;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+.column-height 
+{
+    /*height: 425px;*/
+    min-height: 425px;
+}
+
+.column-width 
+{
+    min-width: 160px;
+}
+
+#mapDiv 
+{
+    position:relative;
+    margin:0;
+    padding:0;
+    width:100%;
+    height:425px;
+}
+
+.esri-logo 
+{
+    height:23px; 
+    padding-right:10px;
+    padding-left: 10px;
+}
+
+.column-desc 
+{
+    background:#f5f5f5; 
+    margin-top:-10px; 
+    margin-bottom:10px; 
+    /*margin-left: -10px;
+    margin-right: -10px;*/
+    padding:7px;
+}
+
+.in-progress 
+{
+    width:23px;
+    height:23px;
+    /*margin-right: 5px;*/
+    margin-left: 10px;
+}
+
+.code-window
+{
+    margin-right: 15px;
+}
+
+.code-formatting, .code-formatting b
+{
+    margin:0;
+    max-height: 400px;
+    word-wrap: normal;
+    overflow-x: scroll;
+    white-space: pre;
+    font-family: courier;
+    background-color: #fff;
+    color: Blue;
+}
+
+.padding5 
+{
+    padding:5px;
+}
+
+.width75
+{
+    width:75%;
+}
+
+.width99
+{
+    width:100%;
+}
+
+#mapItems 
+{
+    position:relative; 
+    max-height: 200px;
+    margin: 0px 0 0 0;
+    overflow-y: scroll;
+    overflow-x:hidden;
+    background: #ECECEC;
+}
+
+#mapItems ul
+{
+    /*width: 10000px;*/
+    margin: 5px 0 5px 0;
+    /*line-height: 40px;*/
+    /*white-space: nowrap;*/
+}
+
+#mapItems li
+{
+    /*display: inline;*/
+    list-style-type: none;
+    /*margin: 0 2px;*/
+    padding: 6px;
+    margin: 1px 0 0 1px;
+}
+
+/* Esri Overrides */
+.esriPopupWrapper
+{
+    line-height: 1.5;
+}
+
+.esriPopup .contentPane 
+{
+    padding: 5px;
+}
+
+.esriPopup .contentPane .btn
+{
+    padding: 0;
+    margin: 0;
+    font-size: 12px;
+}
+
+/* Bootstrap Overrides */
+.container-fluid 
+{
+    padding: 0px;
+}
+
+.row-fluid [class*="span"] 
+{
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.row-fluid [class*="span"]:first-child {
+    margin-left: 10px;
+}
+
+.tab-content {
+    overflow: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 
+{
+    margin: 0 0 0 0;
+}
+
+.btn 
+{
+    margin-bottom: 5px;
+}
+
+.radio input[type="radio"], .checkbox input[type="checkbox"] {
+    float:none;
+    margin-left: -18px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+/* Code Formatting Overrides */
+.syntaxhighlighter .toolbar {
+	display: none;
+}
+
+.syntaxhighlighter .gutter .line {	
+	border-right: 0px solid !important;
+}
+
+.syntaxhighlighter .gutter .line.highlighted{
+	background-color: #777 !important;		
+}
+
+.syntaxhighlighter {
+	margin: 0 0 0 0 !important;
+	font-size:12px !important;
+	max-height:500px
+}
+
+/* Media Queries */
+
+@media (min-width: 1200px)
+{
+    .row-fluid [class*="span"]:first-child {
+        margin-left: 10px;
+    }
+}
+
+@media (max-width: 979px) 
+{
+    .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top 
+    {
+        margin-right: 0;
+        margin-left: 0;
+        margin-bottom: 0;
+    }
+    
+    .navbar .brand 
+    {
+        margin-bottom: 0;
+        margin-left: -10px;
+    }
+    
+}
+
+@media (max-width: 767px) 
+{
+    body {
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    
+   .navbar-fixed-top, .navbar-fixed-bottom, .navbar-static-top {
+        margin-right: 0;
+        margin-left: 0;
+        margin-bottom: 0;
+    }
+    
+    .row-fluid [class*="span"]:first-child {
+        margin-top: 0;
+        margin-left: 0;
+    }
+    
+    .row-fluid [class*="span"] {
+        margin-top: 0;
+        margin-left: 0;
+     }
+     
+     .map-container
+     {
+         padding:0;
+     }
+
+     .column-container 
+     {
+         padding-top:0;
+         padding-left:0;
+         padding-right:0;
+         padding-bottom:10px;
+     }
+     
+     .code-window 
+     {
+         margin:0;
+     }
+     
+    .column-height {
+        height: 100%;
+        min-height: 100%;
+    }
+    
+    .btn .btn-primary
+    {
+        padding: 6px 14px;
+    }
+     
+}
+
+@media all and (max-width: 480px) 
+{
+    .navbar .brand {
+        font-size: 14px;
+    }
+    
+    .column-desc
+    {
+        display: none;
+        margin-bottom: 0;
+    }
+    
+    #mapDiv 
+    {
+        height:250px;
+    }   
+    
+    .width99 
+    {
+        width: auto;
+    }
+    
+    hr 
+    {
+        display:none;
+    }
+    
+    label 
+    {
+        display: inline-block;
+    }
+    
+    .syntaxhighlighter {
+    	max-height:300px;
+    	font-size: 11px  !important;
+    }    
+    
+}

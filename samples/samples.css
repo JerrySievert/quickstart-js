@@ -1,0 +1,427 @@
+/*** Author: Allan Laframboise (alaframboise@esri.com)
+/*** Date: 10/13/2012 ***/
+
+html, body
+{
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: Helvetica;
+    font-size: 14px;
+}
+
+.visible
+{
+    /*visibility:visible;*/
+    display:block;
+}
+
+.hidden
+{
+   /*visibility:hidden;*/
+   display:none;
+}
+
+#mapDiv 
+{
+    position: absolute;
+    top: 0;
+    /*bottom: 130px;*/
+    /*float:none;*/
+    width: 100%;
+    height: 100%;
+}
+
+/*** Bottom Panel ***/
+#bottomPanel 
+{
+    position:absolute; 
+    bottom:0;
+    height:120px;
+    width:100%;
+    background: rgba(0, 0, 0, .9);
+    z-index:100;
+}
+
+/*** Message Panel ***/
+#messagePanel
+{
+    width:100%;
+    height:25px;
+    /*background: rgba(0, 50, 255, .8);*/
+    /*background: rgba(0, 125, 0, .8);*/
+    background-color: rgba(100, 100, 100, 0.25);
+    color: rgba(255,255,255, 1);
+    text-align: center;
+}
+
+#message
+{
+    font-size: 16px;
+    display: block;
+    padding-top: 4px;
+    font-weight:normal;    
+}
+
+.messageButton
+{
+    float:left;
+    margin-top: -3px;
+    width: 24px;
+}
+
+/*** Button Panel ***/
+#buttonPanel 
+{
+    text-align:center;
+}
+
+/*** Group Panel ***/
+#groupPanel 
+{
+    display:inline-block;
+    margin:25px auto;
+}
+
+/*** User controls ***/
+/*#inputControls
+{
+    float:left;
+    width:300px;
+    height:88px;
+    margin-right: 14px;
+    background: buttonface;
+}*/
+#inputControls
+{
+    display:inline-block;
+    text-align:center;
+    color: #fff;
+}
+
+#inputControls ul 
+{
+    list-style-type: none;
+    margin:0;
+}
+
+#inputControls li 
+{
+    float: left;
+    padding-right: 20px;
+}
+
+#inputControls span
+{
+    float:left;
+}
+
+/**** Information panel ***/
+.infoPanel
+{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    padding: 5px;
+    width: 240px;
+    background: rgba(0, 0, 0, .75);
+    color: rgba(255,255,255,1);
+}
+
+.infoLabel
+{
+    font-size:16px;
+}
+
+.infoList
+{
+    margin:0px;
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+.infoList a:hover 
+{
+    color: rgba(0, 200, 0, .8);
+}
+
+.infoItem 
+{
+    margin-left: -10px;
+    padding: 3px 3px;
+    cursor:pointer;    
+}
+
+/*** Loading image ***/
+#progress
+{
+    position: absolute;
+    left: 50%;
+    top: 40%;
+    z-index: 100;
+}
+
+.popupZoom
+{
+    float:right;
+    cursor:pointer;
+    color: rgba(140, 140, 140, 1);
+}
+
+/*** Buttons ***/
+button,
+input,
+select,
+textarea {
+  margin: 0;
+  font-size: 100%;
+  vertical-align: middle;
+}
+
+button,
+input {
+  *overflow: visible;
+  line-height: normal;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+
+
+.btn {
+    padding: 10px 15px;
+    background: #4479BA;
+    color: #FFF;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: solid 1px #20538D;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    -webkit-transition-duration: 0.2s;
+    -moz-transition-duration: 0.2s;
+    transition-duration: 0.2s;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
+    font-size:14px;
+}
+
+.btn:hover {
+    background: #234670; /*#356094;*/
+    border: solid 1px #2A4E77;
+    text-decoration: none;
+}
+
+.btn:active {
+    -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    background: #2E5481;
+    border: solid 1px #203E5F;
+}
+
+.btn-clear,
+.btn-clear:hover,
+.btn-clear:active, 
+{
+  color: #ffffff;
+  background-color: #f5f5f5;
+  *background-color: #e6e6e6;
+}
+
+/*** Input ***/
+
+label,
+input,
+button,
+select,
+textarea {
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 20px;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 5px;
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+  display: inline-block;
+  height: 20px;
+  padding: 4px 6px;
+  margin-bottom: 9px;
+  margin-top: 7px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #555555;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+}
+
+input,
+textarea,
+.uneditable-input {
+  width: 150px;
+}
+
+textarea {
+  height: auto;
+}
+
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+.uneditable-input {
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+     -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+       -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+          transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.uneditable-input:focus {
+  border-color: rgba(82, 168, 236, 0.8);
+  outline: 0;
+  outline: thin dotted \9;
+  /* IE6-9 */
+
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+     -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+          box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin: 4px 0 0;
+  margin-top: 1px \9;
+  *margin-top: 0;
+  line-height: normal;
+  cursor: pointer;
+}
+
+input[type="file"],
+input[type="image"],
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+input[type="radio"],
+input[type="checkbox"] {
+  width: auto;
+  margin: 10px 10px 10px 10px;
+}
+
+select,
+input[type="file"] {
+  height: 30px;
+  /* In IE7, the height of the select element cannot be changed by height, only font-size */
+
+  *margin-top: 4px;
+  /* For IE7, add top margin to align select with labels */
+
+  line-height: 30px;
+}
+
+select {
+  width: 150px;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+}
+
+select[multiple],
+select[size] {
+  height: auto;
+}
+
+select:focus,
+input[type="file"]:focus,
+input[type="radio"]:focus,
+input[type="checkbox"]:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.inline 
+{
+    display:inline-block;
+}
+
+.selected
+{
+    background: #356094;
+    border: solid 1px #2A4E77;
+    text-decoration: none;
+}

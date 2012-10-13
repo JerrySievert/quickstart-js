@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="description" content="Quick Start JS"/>
+		<meta name="author" content="Allan Laframboise"/>
+        <title>Geolocation</title>
+        <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.2/js/esri/css/esri.css" />
+        <link rel="stylesheet" href="samples.css" />
+        <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2compact"></script>
+        <script type="text/javascript" src="../src/esriquickstart.js"></script>
+   
+        <script type="text/javascript">
+            var map;
+            function init() {
+                map = new esri.Map("mapDiv");
+                map.setBasemap(esri.arcgisonline.basemaps.STREETS);
+                map.centerAtLatLon(35, -95, 3);
+            }
+
+            function showLocation(position) {
+                var pt = new esri.geometry.Point(position.coords.longitude, position.coords.latitude);
+                var zoom = 13;
+
+                var options = { title: "<b>My Geolocation</b>", 
+                    content: "Latitude: " + pt.getLatitude(3) + "</br>Longitude: " + pt.getLongitude(3),
+                    symbol: map.defaultSymbols.Geolocation};       
+        
+                map.graphics.addPoint(pt, options);			
+	            map.centerAtPoint(pt, zoom);
+            }
+
+            function locationError(error) {
+                if (err.code == 1) {
+                    alert("Error: Access is denied!");
+                } else if (err.code == 2) {
+                    alert("Error: Position is unavailable!");
+                }
+            }
+            dojo.addOnLoad(init);
+        </script>
+ 
+    </head>
+    <body>
+        <div id="mapDiv"></div>
+        <div id="bottomPanel">
+            <div id="messagePanel"><span id="message">Find your web browser geolocation</span></div>
+            <div id="buttonPanel">
+               <div id="groupPanel"> 
+                <!--button class="btn" onclick="map.centerAtMyLocation(map.defaultSymbols.Geolocation, 10);">Find Me!</button-->
+                <button class="btn" onclick="map.findMyLocation(showLocation, locationError);">Find Me!</button>
+                <button class="btn" onclick="map.graphics.clearAll(true);">Clear</button>
+              </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="description" content="Quick Start JS"/>
+		<meta name="author" content="Allan Laframboise"/>
+        <title>Directions</title>
+        <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.2/js/esri/css/esri.css" />
+        <link rel="stylesheet" href="samples.css" />
+        <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2compact"></script>
+        <script type="text/javascript" src="../src/esriquickstart.js"></script>
+   
+        <script type="text/javascript">
+            var map;
+            var routeService;
+            var activeToolId;
+            var directions;
+            var directionsList;
+
+            function init() {
+                // Create the map
+                map = new esri.Map("mapDiv", { basemap: esri.arcgisonline.basemaps.STREETS });
+                map.centerAtLatLon(34.03, -117.33, 11);
+                map.addListener("onClick", onClickFindDirectionsCallback);
+                // Create services
+				routeService = new esriqs.arcgisonline.RouteService();
+            }
+
+            // Set the up the app state
+            function setActiveTool(ctrl) {
+                activeToolId = ctrl.id;
+                // Set user message
+                switch (activeToolId) {
+                    case "addStart":
+                        setMessage("Click the map");
+                        break;
+                    case "addStop":
+                        setMessage("Click the map");
+                        break;
+                    default:
+                        setMessage("Click a button to start");
+                }
+                //setSelected(ctrl);
+
+                // Find the list to populate
+                if (!directionsList)
+                    directionsList = document.getElementById('directionsList')
+            }
+
+            // Add graphics when user clicks map
+            function onClickFindDirectionsCallback(evt) {
+                var pt = evt.mapPoint;
+                switch (activeToolId) {
+                    case 'addStart':
+                        addStartStopGraphic(pt, map.defaultSymbols.Start, "START");
+                        break;
+                    case 'addStop':
+                        addStartStopGraphic(pt, map.defaultSymbols.Stop, "STOP");
+                        break;
+                    default:
+                }
+            }
+
+            // Add start stop graphics to map
+            function addStartStopGraphic(pt, symbol, id) {
+                // Remove old graphics
+                map.graphics.removeByAttribute("ID", id);
+                map.graphics.removeByAttribute("ID", "ROUTE");
+                map.graphics.removeByAttribute("ID", "SEGMENT");
+                // Add the new start/stop graphic
+                map.graphics.addPoint(pt, { title: "<b>Directions " + id + "</b>",
+                    content: pt.getLatitude(5) + " " + pt.getLongitude(5),
+                    symbol: symbol,
+                    attributes: { "ID": id}
+                });
+                // Find route directions
+                getDirections();
+            }
+
+            // Draw route graphics
+            function getDirections() {
+                var startGraphic = map.graphics.findByAttribute("ID", "START")[0];
+                var stopGraphic = map.graphics.findByAttribute("ID", "STOP")[0];
+                if (startGraphic && stopGraphic) {
+                    setStyle("progress","progress visible");
+                    routeService.getDirections({ stops: [startGraphic.geometry, stopGraphic.geometry] }, function (routeInfo) {
+                        setStyle("progress", "progress hidden");
+                        if (routeInfo) {
+                            if (routeInfo.routeResults && routeInfo.routeResults.length > 0) {
+                                directions = routeInfo.routeResults[0].directions;
+                                //  Add route to map
+                                map.graphics.addLine(directions.mergedGeometry,
+                                     { title: "<b>Route</b>",
+                                         content: "Distance: " + directions.totalLength.toFixed(1) + " miles<br>" + "Time: " + directions.totalTime.toFixed(1) + " minutes",
+                                         symbols: map.defaultSymbols.Line,
+                                         attributes: { "ID": "ROUTE" },
+                                         placement: "bottom"
+                                     });
+                                // Zoom to route
+                                map.setExtent(directions.mergedGeometry.getExtent().expand(2.0));
+                                // Show turn-by-turn directions
+                                showDirections(directions);
+                            }
+                        }
+                        else {
+                            alert("Could not find route.");
+                        }
+                    }, function (error) {
+                        setStyle("progress", "progress hidden");
+                        alert("Could not find route.");
+                    });
+                    
+                }
+            }
+
+            // Display turn-by-turn directions
+            function showDirections(directions) {
+                var dirStrings = [];
+                for (var i = 0; i < directions.features.length; i++) {
+                    var feature = directions.features[i];
+                    feature.attributes.text = feature.attributes.text + " (" + feature.attributes.length.toFixed(2) + " miles )";
+                    dirStrings.push("<li id=item" + i + " class='infoItem' onmouseover='selectDirection(" + i + ",false);' onmousedown='selectDirection(" + i + ",true);'><a>" + feature.attributes.text + "</a></li>");
+                }
+                 directionsList.innerHTML = dirStrings.join("");
+                 //setStyle("directionsList", "infoList visible");
+            }
+
+            // Highlight and zoom to route segment
+            function selectDirection(index, zoom) {
+                if (index > -1) {
+                    var segment = directions.features[index];
+                    var title = "Direction: " + (Number(index) + 1);
+                    var text = segment.attributes.text;
+                    // Create segment graphic
+                    map.graphics.removeByAttribute("ID", "SEGMENT");
+                    map.graphics.addLine(segment.geometry, { title: title, content: text, symbol: map.defaultSymbols.Route, attributes: { "ID": "SEGMENT"} });
+                    // Show popup
+                    map.infoWindow.setTitle(title);
+                    map.infoWindow.setContent(map.graphics.findByAttribute("ID", "SEGMENT")[0].infoTemplate.content);
+                    map.infoWindow.show(segment.geometry.getPoint(0, 0));
+                    if (zoom)
+                        map.centerAt(segment.geometry.getPoint(0, 0), map.getLevel());
+                }
+            }
+
+            function clearDirectionGraphics() {
+                directionsList.innerHTML = "";
+                map.graphics.clearAll(true);
+            }
+
+            function setMessage(msg) {
+                var element = document.getElementById("message");
+                element.innerHTML = msg;
+            }
+
+            function setSelected(button) {
+                var elements = document.getElementsByClassName('button');
+                for (var i = 0; i < elements.length; i++) {
+                    setStyle(elements[i], "button");
+                }
+                button.className = "button selected";
+            }
+
+            function setStyle(element, className) {
+                element.className = className;
+            }
+
+            dojo.addOnLoad(init);
+        </script>
+ 
+    </head>
+    <body>
+        <div id="mapDiv"></div>
+        <div class="infoPanel"><span class="infoLabel">Directions</span><ol id="directionsList" class="infoList"></ol></div>
+        <div id="bottomPanel">
+            <div id="messagePanel"><span id="message" class="infoLabel">Click a button and then add route points</span></div>
+            <div id="buttonPanel">
+               <div id="groupPanel"> 
+                <button class="btn" id="addStart" onclick="setActiveTool(this);">Add Start</button>
+                <button class="btn" id="addStop" onclick="setActiveTool(this);">Add Stop</button>
+                <button class="btn" id="clear" onclick="clearDirectionGraphics(); setActiveTool(this);">Clear</button>
+              </div>
+            </div>
+        </div>
+        <div id="progress" class="progress hidden"><img alt="" src="../assets/img/progress.gif"/></div>
+    </body>
+</html>

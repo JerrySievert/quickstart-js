@@ -1,0 +1,1021 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Quick Start JS Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Quick Start JS"/>
+    <meta name="author" content="Allan Laframboise"/>
+
+    <!-- Bootstrap Stylesheets -->
+    <style type="text/css">
+        body {
+            padding-top: 45px;
+            padding-bottom: 0px;
+        }  
+    </style>
+    <link href="../assets/css/bootstrap.css" rel="stylesheet"/>
+    <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet"/>
+	
+    <!-- Syntaxhighlighter Stylesheets -->
+	<link rel="stylesheet" type="text/css" href="../assets/css/syntaxhighlighter/shCore.css" />
+	<link rel="stylesheet" type="text/css" href="../assets/css/syntaxhighlighter/shThemeDefault.css" />	
+	<script type="text/javascript" src="../assets/css/syntaxhighlighter/shCore.js"></script>
+	<script type="text/javascript" src="../assets/css/syntaxhighlighter/shBrushJScript.js"></script>
+    
+    <!-- Esri Stylesheet - required at 3.2-->
+    <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.2/js/esri/css/esri.css" />
+
+    <!-- Demo Stylesheet -->
+    <link href="demo.css" rel="stylesheet"/>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="../assets/css/ico/favicon.ico"/>
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/css/ico/apple-touch-icon-144-precomposed.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/css/ico/apple-touch-icon-114-precomposed.png"/>
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/css/ico/apple-touch-icon-72-precomposed.png"/>
+    <link rel="apple-touch-icon-precomposed" href="../assets/css/ico/apple-touch-icon-57-precomposed.png"/>
+  
+    <!-- Esri library-->
+    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2compact"></script>
+
+    <!-- Quick Start and App library-->
+    <script type="text/javascript" src="../src/esriquickstart.js"></script>
+    <script type="text/javascript" src="demo.js"></script>
+
+    <script type="text/javascript">
+        var map;
+        var geocodeService;
+		var routeService;
+		var geometryService;
+
+        function init() {
+            // Create map
+            var options = {
+                zoom: 9,
+                center: new esri.geometry.Point(-79.4, 43.55),
+                basemap: esri.arcgisonline.basemaps.STREETS
+            };
+            map = new esri.Map("mapDiv", options);
+            // Create geoservices
+			geocodeService = new esriqs.arcgisonline.GeocodeService();
+			routeService = new esriqs.arcgisonline.RouteService();
+			geometryService = new esriqs.arcgisonline.GeometryService();
+		}
+        dojo.addOnLoad(init);
+    </script>
+
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">
+            <img id="progress" class="in-progress hide" alt="" src="../assets/img/progress.gif" />
+            <img class="esri-logo" alt="" src="../assets/img/logo_esri_white.png"/>JavaScript Quick Start
+          </a>
+          <div class="nav-collapse collapse">
+            <!--p class="navbar-text pull-right">
+              Logged in as <a href="#" class="navbar-link">Username</a>
+            </p-->
+            <ul class="nav">
+              <li class="active"><a id="basemaps" onclick="setActiveModule(this);" href="#tab1" data-toggle="tab">Basemaps</a></li>
+              <li><a id="geolocation" onclick="setActiveModule(this);" href="#tab2" data-toggle="tab">Geolocation</a></li>
+              <li><a id="graphics" onclick="setActiveModule(this);" href="#tab3" data-toggle="tab">Graphics</a></li>
+              <li><a id="places" onclick="setActiveModule(this);" href="#tab4" data-toggle="tab">Places</a></li>
+              <li><a id="directions" onclick="setActiveModule(this);" href="#tab5" data-toggle="tab">Directions</a></li>
+              <li><a id="cloud" onclick="setActiveModule(this);" href="#tab6" data-toggle="tab">Cloud</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div> <!--/container-fluid-->
+      </div><!--/.navbar-inner-->
+    </div><!--/.navbar-->
+
+    <div class="container-fluid">
+        <div class="row-fluid">
+
+            <!--map left-->
+            <div class="span9">
+                <div class="map-container column-height">
+                    <div id="mapDiv"></div>
+                    <div id="mapItems" class="hide"></div>
+                </div>
+            </div><!--/span-->
+
+            <!--controls right-->
+            <div class="span3">
+                <div class="column-container column-height column-width">
+                    <div class="tab-content padding5">
+                        <div class="tab-pane active" id="tab1">
+                            <div class="row-fluid">
+                                <div class="column-desc">
+                                    <h3>Basemaps</h3>
+                                    <p>Choose from a wide variety of basemaps for your mobile and web applications. Use ArcGIS basemaps or your own.</p>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <button class="btn btn-primary width99" onclick="map.setBasemap(esri.arcgisonline.basemaps.STREETS);">Streets</button>
+                                <button class="btn btn-primary width99" onclick="map.setBasemap(esri.arcgisonline.basemaps.SATELLITE);">Satellite</button>
+                                <button class="btn btn-primary width99" onclick="map.setBasemap(esri.arcgisonline.basemaps.TOPOGRAPHIC);">Topographic</button>
+                                <button class="btn btn-primary width99" onclick="map.setBasemap(esri.arcgisonline.basemaps.GRAYCANVAS);">Gray Canvas</button>
+                                 <hr />
+                                <button class="btn btn-inverse btn-large width75" onclick="showCode();"> View Code&raquo;</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab2">
+                            <div class="row-fluid">
+                                <div class="column-desc">
+                                    <h3>Geolocation</h3>
+                                    <p>Find and display your geolocation on any map.  Create custom pop-ups and add your content.</p>
+                                </div>
+                           </div>
+                            <div class="row-fluid">
+                                <button class="btn btn-primary width99" onclick="map.centerAtMyLocation(map.defaultSymbols.Geolocation, 10);">Find Me!</button>
+                                <!--button class="btn" onclick="map.findMyLocation(showLocation, errorHandler);">Find Me!</button-->
+                                <button class="btn width99" onclick="map.graphics.clearAll(true);">Clear</button>
+                                <hr />
+                                <button class="btn btn-inverse btn-large width75" onclick="showCode();"> View Code&raquo;</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab3">
+                            <div class="row-fluid">
+                                <div class="column-desc">
+                                    <h3>Add Graphics</h3>
+                                    <p>Add point, line, polyon or other complex geometries to your map. Use default symbols or your own custom symbols.</p>
+                                </div>
+                           </div>
+                            <div class="row-fluid">
+                                 <button class="btn btn-primary width99" id="addPoint" onclick="setActiveTool(this);">Add Point</button>
+                                <button class="btn btn-primary width99" id="addLine" onclick="setActiveTool(this);">Add Line</button>
+                                <button class="btn btn-primary width99" id="addPolygon" onclick="setActiveTool(this);">Add Polygon</button>
+                                <button class="btn width99" id="clear" onclick="setActiveTool(this); clearAddGraphics(true);">Clear</button>
+                                 <hr />
+                                <button class="btn btn-inverse btn-large width75" onclick="showCode();"> View Code&raquo;</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab4">
+                            <div class="row-fluid">
+                                <div class="column-desc">
+                                 <h3>Find Places</h3>
+                                    <p>Find addresses and business all around the world. Perform forward, reverse and batch geocoding.</p>
+                                </div>
+                           </div>
+                            <div class="row-fluid">
+                                <input id="placeInput" class="input-block-level large" type="text" value="" placeholder="Address or business"/><!--span class="help-block"></span-->
+                                <label>
+                                    <select id="placeFilter" class="width99" size="0">
+                                        <option>All</option>
+                                        <option selected="selected">Coffee Shops</option>
+                                        <option>Restaurants</option>
+                                        <option>Gas Stations</option>
+                                        <option>Grocery Store</option>
+                                        <option>Shopping</option>
+                                        <option>Hotels</option>
+                                    </select>
+                                </label>
+                                <label class="checkbox"><input id="useMapExtent" type="checkbox" checked="checked"/>In Map</label>                        
+                                <button class="btn btn-primary width99" id="search" onclick="findPlaces(document.getElementById('placeInput').value);">Go</button>
+                                <button class="btn width99" id="Button1" onclick="clearFindGraphics();">Clear</button>
+                                <hr />
+                                <button class="btn btn-inverse btn-large width75" onclick="showCode();"> View Code&raquo;</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab5">
+                            <div class="row-fluid">
+                                <div class="column-desc">
+                                     <h3>Directions</h3>
+                                    <p>Find directions for multiple stops. You can also include with barriers and restricted paths to be routed around.</p>
+                                </div>
+                           </div>
+                            <div class="row-fluid">                 
+                                <button class="btn btn-primary width99" id="addStart" onclick="setActiveTool(this);">Add Start</button>
+                                <button class="btn btn-primary width99" id="addStop" onclick="setActiveTool(this);">Add Stop</button>
+                                <button class="btn width99" id="Button2" onclick="clearDirectionGraphics();">Clear</button>
+                                 <hr />
+                                <button class="btn btn-inverse btn-large width75" onclick="showCode();"> View Code&raquo;</button>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab6">
+                            <div class="row-fluid">
+                                <div class="column-desc">
+                                     <h3>Cloud Data</h3>
+                                    <p>Easily access, display and query your own points, lines and polygons hosted in the ArcGIS Online cloud.</p>
+                                </div>
+                           </div>
+                            <div class="row-fluid">                 
+                                <button class="btn btn-primary width99" id="addData" onclick="selectAll();">Add Data</button>
+                                <input id="sqlInput" class="input-block-level large disabled" type="text" value="COUNTRY = 'US'" placeholder="COUNTRY = 'US'"/>
+                                <button class="btn btn-primary disabled width99 disabled" id="searchBySQL" onclick="searchBySQL();">Apply SQL Filter</button>
+                                <label>
+                                    <select id="searchByDistanceInput" value="500" class="width99" size="0">
+                                        <option>10</option>
+                                        <option>100</option>
+                                        <option selected="selected">500</option>
+                                        <option>1000</option>
+                                    </select>
+                                </label>
+                                <button class="btn btn-primary width99 disabled" id="searchByDistance" onclick="setActiveTool(this); onClickSelectByDistanceCallback({mapPoint:map.extent.getCenter()});">Search by Circle</button>
+                                <button class="btn width99" onclick="clearCloudGraphics();">Clear</button>
+                                 <hr />
+                                <button class="btn btn-inverse btn-large width75" onclick="showCode();"> View Code&raquo;</button>
+                            </div>
+                        </div>
+
+                    </div><!--tab content-->
+                </div><!-- column content-->
+            </div><!--/span-->
+        </div><!--/row-->
+        <div class="row-fluid">
+            <div class="span12">
+<!--Basemaps Code-->
+<div id="basemapsCode" class="code-window hide">	
+<pre class="brush: js; highlight: [1,12,13,14,15,16,17,27,28,29,30];">
+&lt;!--Basemaps-->
+&lt;html>
+    &lt;head>
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        &lt;title>Esri Javascript Quick Start&lt;/title>
+        &lt;link rel="stylesheet" href="/starterapp/css/esriquickstart.css" />
+        &lt;script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.1compact">&lt;/script>
+        &lt;script type="text/javascript" src="/starterapp/scripts/esriquickstart.js">&lt;/script>
+        
+        &lt;script type="text/javascript">
+           function init() {
+                var options = { 
+                    zoom: 9,
+                    center: new esri.geometry.Point(-79.4, 43.55),
+                    basemap: esri.arcgisonline.basemaps.STREETS
+                };
+               map = new esri.Map("mapDiv",options);
+            }
+        &lt;/script>
+
+    &lt;/head>
+    &lt;body>
+        &lt;div id="mapDiv">&lt;/div>
+        &lt;div id="bottomPanel">
+            &lt;div id="buttonPanel"> 
+                &lt;div id="groupPanel">
+                    &lt;button onclick="map.setBasemap(esri.arcgisonline.basemaps.STREETS);">Streets&lt;/button>
+                    &lt;button onclick="map.setBasemap(esri.arcgisonline.basemaps.SATELLITE);">Satellite&lt;/button>
+                    &lt;button onclick="map.setBasemap(esri.arcgisonline.basemaps.TOPOGRAPHIC);">Topographic&lt;/button>
+                    &lt;button onclick="map.setBasemap(esri.arcgisonline.basemaps.GRAYCANVAS);">Gray Canvas&lt;/button>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    &lt;/body>
+&lt;/html>
+</pre>
+</div>
+<!--Geolocation Code-->
+<div id="geolocationCode" class="code-window hide">
+<pre class="brush: js; highlight: [1,22,23,24,25,26,27,47];">
+&lt;!--Geolocation-->
+&lt;html>
+    &lt;head>
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        &lt;title>Esri Javascript Quick Start&lt;/title>
+        &lt;link rel="stylesheet" href="/starterapp/css/esriquickstart.css" />
+        &lt;script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.1compact">&lt;/script>
+        &lt;script type="text/javascript" src="/starterapp/scripts/esriquickstart.js">&lt;/script>
+        
+        &lt;script type="text/javascript">
+            var map;
+            function init() {
+                var options = { 
+                    zoom: 9,
+                    center: new esri.geometry.Point(-79.4, 43.55),
+                    basemap: esri.arcgisonline.basemaps.STREETS
+                };
+               map = new esri.Map("mapDiv",options);
+            }
+
+            function showLocation(position) {
+                var pt = new esri.geometry.Point(position.coords.longitude, position.coords.latitude);
+                map.graphics.addPoint(pt, { title: "&lt;b>My Geolocation&lt;/b>", 
+                   content: "Latitude: " + pt.y.toFixed(3) + "&lt;/br>Longitude: " + pt.x.toFixed(3),
+                   symbol: map.defaultSymbols.Geolocation});
+                var zoom = 13;			
+                map.centerAtPoint(pt, zoom);
+            }
+
+            function locationError(error) {
+                if (err.code == 1) {
+                   alert("Error: Access is denied!");
+                } else if (err.code == 2) {
+                    alert("Error: Position is unavailable!");
+                }
+            }
+            
+            dojo.addOnLoad(init);
+        &lt;/script>
+
+    &lt;/head>
+    &lt;body>
+        &lt;div id="mapDiv">&lt;/div>
+         &lt;div id="bottomPanel">
+            &lt;div id="buttonPanel">
+               &lt;div id="groupPanel"> 
+                &lt;button onclick="map.findMyLocation(showLocation, locationError);">Find Me!&lt;/button>
+                &lt;button onclick="map.graphics.clearAll(true);">Clear&lt;/button>
+              &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    &lt;/body>
+&lt;/html>
+</pre>
+</div>
+<!--Graphics Code-->
+<div id="graphicsCode" class="code-window hide">
+<pre class="brush: js; highlight: [1,20,21,75,76,85,86,106,107];">
+&lt;!--Graphics-->
+&lt;html>
+    &lt;head>
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        &lt;title>Esri Javascript Quick Start&lt;/title>
+        &lt;link rel="stylesheet" href="/starterapp/css/esriquickstart.css" />
+        &lt;script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.1compact">&lt;/script>
+        &lt;script type="text/javascript" src="/starterapp/scripts/esriquickstart.js">&lt;/script>
+        
+        &lt;script type="text/javascript">
+            var map;
+            function init() {
+                var options = { 
+                    zoom: 9,
+                    center: new esri.geometry.Point(-79.4, 43.55),
+                    basemap: esri.arcgisonline.basemaps.STREETS
+                };
+               map = new esri.Map("mapDiv",options);
+               // Connect listeners
+               map.addListener("onClick", addGraphicCallback);
+               map.addListener("onDblClick", addGraphicCallback);
+            }
+
+            var pts;
+            var activeToolId;
+
+            function setActiveTool(ctrl) {
+                activeToolId = ctrl.id;
+                clearAddGraphics(true);
+                // Lock map to digitize
+                if (activeToolId == "clear")
+                    map.enableDoubleClickZoom();
+                else
+                    map.disableDoubleClickZoom();
+
+                // Set user message
+                switch (activeToolId) {
+                    case "addPoint":
+                        setMessage("Click the map to draw a point");
+                        break;
+                    case "addLine":
+                        setMessage("Click the map to draw a line. Double-click to finish.");
+                        break;
+                    case "addPolygon":
+                        setMessage("Click the map to draw a polygon. Double-click to finish.");
+                        break;
+                    default:
+                        setMessage("Click a button to start");
+                }
+
+            }
+
+            // Listen for mouse click events
+            function addGraphicCallback(evt) {
+                var pt = evt.mapPoint;
+                clearAddGraphics(false);
+
+                var finished = (evt.type == "dblclick" || evt.type == "touchend");
+                switch (activeToolId) {
+                    case 'addPoint':
+                        addPoint(pt, finished);
+                        break;
+                    case 'addLine':
+                        addLine(pt, finished);
+                        break;
+                    case 'addPolygon':
+                        addPolygon(pt, finished);
+                        break;
+                    default:
+                }
+            }
+
+            // Add point graphic
+            function addPoint(pt, finished) {
+                var options = { title: "Point", content: "Latitude: " + pt.getLatitude(5) + "&lt;/br>Longitude: " + pt.getLongitude(5), attributes: { "ID": "myPoint"} };
+                map.graphics.addPoint(pt, options);
+            }
+
+            // Add line graphic
+            function addLine(pt, finished) {
+                if (!pts) pts = [];
+                pts.push(pt);
+                map.graphics.addPoint(pt, { attributes: { "ID": "temp"} });
+                if (pts.length > 1) {
+                    var options = { title: "Line", content: "Points: " + pts.length, attributes: { "ID": "myLine"} };
+                    map.graphics.addLine(pts, options);
+                }
+                if (finished) {
+                    map.graphics.removeByAttribute("ID", "temp");
+                    pts = null;
+                }
+            }
+
+            // Add polygon graphic
+            function addPolygon(pt, finished) {
+                if (!pts) pts = [];
+                if (pt) {
+                    pts.push(pt);
+                    map.graphics.addPoint(pt, { attributes: { "ID": "temp"} });
+                }
+                if (pts.length > 1)
+                    map.graphics.addPolygon(pts, { attributes: { "ID": "myPolygon"} });
+                if (finished) {
+                    if (pts.length > 2) {
+                        pts.push(pts[0]);
+                        var options = { title: "Polygon", content: "Points: " + (pts.length - 1), attributes: { "ID": "myPolygon"} }
+                        map.graphics.addPolygon(pts, options);
+                    }
+                    map.graphics.removeByAttribute("ID", "temp");
+                    pts = null;
+                }
+            }
+
+            function clearAddGraphics(clearTemp) {
+                map.graphics.removeByAttribute("ID", "myPoint");
+                map.graphics.removeByAttribute("ID", "myLine");
+                map.graphics.removeByAttribute("ID", "myPolygon");
+
+                map.infoWindow.hide();
+
+                if (clearTemp) {
+                    map.graphics.removeByAttribute("ID", "temp");
+                    pts = null;
+                }
+            }
+
+            function setMessage(msg) {
+                var element = document.getElementById("message");
+                element.innerHTML = msg;
+            }
+
+            function setStyle(element, className) {
+                element.className = className;
+            }
+
+            dojo.addOnLoad(init);
+        &lt;/script>
+    &lt;/head>
+    &lt;body>
+       &lt;div id="mapDiv">&lt;/div>
+        &lt;div id="bottomPanel">
+           &lt;div id="messagePanel">&lt;span id="message">Click a button to start&lt;/span>&lt;/div>
+           &lt;div id="buttonPanel">
+               &lt;div id="groupPanel"> 
+                    &lt;button class="btn btn-primary" id="addPoint" onclick="setActiveTool(this);">Add Point&lt;/button>
+                    &lt;button class="btn btn-primary" id="addLine" onclick="setActiveTool(this);">Add Line&lt;/button>
+                    &lt;button class="btn btn-primary" id="addPolygon" onclick="setActiveTool(this);">Add Polygon&lt;/button>
+                    &lt;button class="btn" id="clear" onclick="setActiveTool(this);">Clear&lt;/button>
+               &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    &lt;/body>
+&lt;/html>
+</pre>
+</div>
+<!--Places Code-->
+<div id="placesCode" class="code-window hide">
+<pre class="brush: js; highlight: [1,20,31,32,33,34,35,36,48,53,54,55,56,57,58,59,60,61,62,63];">
+&lt;!--Find Places-->
+&lt;html>
+    &lt;head>
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        &lt;title>Esri Javascript Quick Start&lt;/title>
+        &lt;link rel="stylesheet" href="/css/esriquickstart.css" />
+        &lt;script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.1compact">&lt;/script>
+        &lt;script type="text/javascript" src="/scripts/esriquickstart.js">&lt;/script>
+
+        &lt;script type="text/javascript">
+            var map;
+            var geocodeService;
+
+            function init() {
+                // Create map
+                map = new esri.Map("mapDiv", { basemap: esri.arcgisonline.basemaps.STREETS });
+                map.centerAtLatLon(35, -95, 3);
+                map.addListener("onClick", onClickFindAddressCallback);
+                // Create geoservice
+                geocodeService = esriqs.arcgisonline.GeocodeService();
+            }
+
+            function findPlaces(place) {
+                var placeFilter = document.getElementById('placeFilter').value;
+                var searchExtent;
+
+                if (document.getElementById('useMapExtent').checked)
+                    searchExtent = map.extent;
+
+                // Set place options
+                var searchOptions = { place: place,  // e.g. Redlands, 380 New York St, Starbucks...
+                    placeType: placeFilter,  // e.g. Coffee Shop, Gas Station, Shopping...
+                    searchExtent: searchExtent  // if null, it will search the global database
+                }
+
+                geocodeService.findPlaces(searchOptions, geocodeResults, geocodeErrorHandler);
+                setStyle("progress", "progress visible");
+            }
+
+            function onClickFindAddressCallback(evt) {
+                var filter = document.getElementById('placeFilter').value;
+                if (filter != "---")
+                    geocodeService.findPlaces({ place: filter, searchExtent: map.extent }, geocodeResults, geocodeErrorHandler);
+                else
+                    geocodeService.findAddressFromPoint({ mapPoint: evt.mapPoint }, geocodeResults, geocodeErrorHandler);
+            }
+
+            function geocodeResults(places) {
+                setStyle("progress", "progress hidden");
+                if (places.length > 0) {
+                    clearFindGraphics();
+
+                    for (var i = 0; i &lt; places.length; i++) {
+                        var place = places[i];
+                        var lat = place.point.getLatitude(5);
+                        var lon = place.point.getLongitude(5);
+                        map.graphics.addPoint(place.point, { title: "&lt;b>Geocode Result&lt;/b>",
+                            content: place.address + "&lt;br/>Lat/Lon: " + lat + "," + lon +
+                            "&lt;br/>Locator Type: " + place.locatorType + "&lt;br/>Place Type: " + place.placeType + "&lt;br/>Address Type: " + place.addressType + "&lt;br/> Score: "
+                            + place.score + "&lt;span class='popupZoom' onclick='zoomToPlace(" + lat + "," + lon + ",15)';>Zoom To&lt;/span>",
+                            symbol: map.defaultSymbols.Geolocation,
+                            attributes: { "ID": "PlacesGraphicID" }
+                        });
+                    }
+
+                    zoomToPlaces(places);
+
+                } else {
+                    alert("Sorry, address or place not found.");
+                }
+            }
+
+            function geocodeErrorHandler(errorInfo) {
+                setStyle("progress", "progress hidden");
+                alert("Sorry, address not found!");
+            }
+
+            function zoomToPlaces(places) {
+                var multiPoint = new esri.geometry.Multipoint();
+                for (var i = 0; i &lt; places.length; i++) {
+                    multiPoint.addPoint(places[i].point);
+                }
+                map.setExtent(multiPoint.getExtent().expand(2.0));
+            }
+
+            function zoomToPlace(lat, lon, scale) {
+                map.centerAtLatLon(lat, lon, scale);
+            }
+
+            function clearFindGraphics() {
+                map.graphics.removeByAttribute('ID', 'PlacesGraphicID');
+                map.graphics.clearAll(true);
+            }
+
+            function setStyle(element, className) {
+                element.className = className;
+            }
+
+            dojo.addOnLoad(init);	
+	&lt;/script>
+
+&lt;/head>
+&lt;body>
+       &lt;div id="mapDiv">&lt;/div>
+        &lt;div id="bottomPanel">
+            &lt;div id="messagePanel">&lt;span id="message">Enter an address or click the map&lt;/span>&lt;/div>
+            &lt;div id="buttonPanel"> 
+                &lt;div id="groupPanel">
+                &lt;div id="inputControls">
+                      &lt;label>Place:&lt;input id="Text1" class="textInput" type="text" value="San Diego, CA"/>&lt;/label>
+                      &lt;label>Type:
+                            &lt;select id="Select1" class="selectInput" size="0">
+                                &lt;option selected="selected">---&lt;/option>
+                                &lt;option>Coffee Shops&lt;/option>
+                                &lt;option>Starbucks&lt;/option>
+                                &lt;option>Pizza&lt;/option>
+                                &lt;option>Restaurants&lt;/option>
+                                &lt;option>Gas Stations&lt;/option>
+                                &lt;option>Grocery Store&lt;/option>
+                                &lt;option>Shopping&lt;/option>
+                                &lt;option>Hotels&lt;/option>
+                            &lt;/select>
+                        &lt;/label>
+                        &lt;label>&lt;input id="Checkbox1" type="checkbox" />In Map&lt;/label> 
+                        &lt;button class="btn" id="find" onclick="findPlaces(document.getElementById('placeInput').value);">Go&lt;/button>
+                        &lt;button class="btn btn-clear" id="clear" onclick="clearFindGraphics();">Clear&lt;/button>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+        &lt;div id="progress" class="progress hidden">&lt;img alt="" src="../assets/img/progress.gif"/>&lt;/div>
+    &lt;/body>
+&lt;/html>
+</pre>
+</div>
+<!--Directions Code-->
+<div id="directionsCode" class="code-window hide">
+<pre class="brush: js; highlight: [1,23,52,55,74,83,89,90,91,92,93,94,95,99];">
+&lt;--Directions-->
+&lt;html>
+    &lt;head>
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        &lt;title>Esri Javascript Quick Start&lt;/title>
+        &lt;link rel="stylesheet" href="/css/esriquickstart.css" />
+        &lt;script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.1compact">&lt;/script>
+        &lt;script type="text/javascript" src="/scripts/esriquickstart.js">&lt;/script>
+   
+        &lt;script type="text/javascript">
+            var map;
+            var routeService;
+            var activeToolId;
+            var directions;
+            var directionsList;
+
+            function init() {
+                // Create the map
+                map = new esri.Map("mapDiv", { basemap: esri.arcgisonline.basemaps.STREETS });
+                map.centerAtLatLon(34.03, -117.33, 11);
+                map.addListener("onClick", onClickFindDirectionsCallback);
+                // Create geoservice
+                routeService = esriqs.arcgisonline.RouteService()();
+            }
+
+            // Set the up the app state
+            function setActiveTool(ctrl) {
+                activeToolId = ctrl.id;
+                // Set user message
+                switch (activeToolId) {
+                    case "addStart":
+                        setMessage("Click the map");
+                        break;
+                    case "addStop":
+                        setMessage("Click the map");
+                        break;
+                    default:
+                        setMessage("Click a button to start");
+                }
+                //setSelected(ctrl);
+
+                // Find the list to populate
+                if (!directionsList)
+                    directionsList = document.getElementById('directionsList')
+            }
+
+            // Add graphics when user clicks map
+            function onClickFindDirectionsCallback(evt) {
+                var pt = evt.mapPoint;
+                switch (activeToolId) {
+                    case 'addStart':
+                        addStartStopGraphic(pt, map.defaultSymbols.Start, "START");
+                        break;
+                    case 'addStop':
+                        addStartStopGraphic(pt, map.defaultSymbols.Stop, "STOP");
+                        break;
+                    default:
+                }
+            }
+
+            // Add start stop graphics to map
+            function addStartStopGraphic(pt, symbol, id) {
+                // Remove old graphics
+                map.graphics.removeByAttribute("ID", id);
+                map.graphics.removeByAttribute("ID", "ROUTE");
+                map.graphics.removeByAttribute("ID", "SEGMENT");
+                // Add the new start/stop graphic
+                map.graphics.addPoint(pt, { title: "&lt;b>Directions " + id + "&lt;/b>",
+                    content: pt.getLatitude(5) + " " + pt.getLongitude(5),
+                    symbol: symbol,
+                    attributes: { "ID": id }
+                });
+                // Find route directions
+                getDirections();
+            }
+
+            // Draw route graphics
+            function getDirections() {
+                var startGraphic = map.graphics.findByAttribute("ID", "START")[0];
+                var stopGraphic = map.graphics.findByAttribute("ID", "STOP")[0];
+                if (startGraphic && stopGraphic) {
+                    setStyle("progress", "progress visible");
+                    routeService.getDirections({ stops: [startGraphic.geometry, stopGraphic.geometry] }, function (routeInfo) {
+                        setStyle("progress", "progress hidden");
+                        if (routeInfo) {
+                            if (routeInfo.routeResults && routeInfo.routeResults.length > 0) {
+                                directions = routeInfo.routeResults[0].directions;
+                                //  Add route to map
+                                map.graphics.addLine(directions.mergedGeometry,
+                                     { title: "&lt;b>Route&lt;/b>",
+                                         content: "Distance: " + directions.totalLength.toFixed(1) + " miles&lt;br>" + "Time: " + directions.totalTime.toFixed(1) + " minutes",
+                                         symbols: map.defaultSymbols.Line,
+                                         attributes: { "ID": "ROUTE" },
+                                         placement: "bottom"
+                                     });
+                                // Zoom to route
+                                map.setExtent(directions.mergedGeometry.getExtent().expand(2.0));
+                                // Show turn-by-turn directions
+                                showDirections(directions);
+                            }
+                        }
+                        else {
+                            alert("Could not find route.");
+                        }
+                    }, function (error) {
+                        setStyle("progress", "progress hidden");
+                        alert("Could not find route.");
+                    });
+
+                }
+            }
+
+            // Display turn-by-turn directions
+            function showDirections(directions) {
+                var dirStrings = [];
+                for (var i = 0; i &lt; directions.features.length; i++) {
+                    var feature = directions.features[i];
+                    feature.attributes.text = feature.attributes.text + " (" + feature.attributes.length.toFixed(2) + " miles )";
+                    dirStrings.push("&lt;li id=item" + i + " class='infoItem' onmouseover='selectDirection(" + i + ",false);' onmousedown='selectDirection(" + i + ",true);'>&lt;a>" + feature.attributes.text + "&lt;/a>&lt;/li>");
+                }
+                directionsList.innerHTML = dirStrings.join("");
+                //setStyle("directionsList", "infoList visible");
+            }
+
+            // Highlight and zoom to route segment
+            function selectDirection(index, zoom) {
+                if (index > -1) {
+                    var segment = directions.features[index];
+                    var title = "Direction: " + (Number(index) + 1);
+                    var text = segment.attributes.text;
+                    // Create segment graphic
+                    map.graphics.removeByAttribute("ID", "SEGMENT");
+                    map.graphics.addLine(segment.geometry, { title: title, content: text, symbol: map.defaultSymbols.Route, attributes: { "ID": "SEGMENT"} });
+                    // Show popup
+                    map.infoWindow.setTitle(title);
+                    map.infoWindow.setContent(map.graphics.findByAttribute("ID", "SEGMENT")[0].infoTemplate.content);
+                    map.infoWindow.show(segment.geometry.getPoint(0, 0));
+                    if (zoom)
+                        map.centerAt(segment.geometry.getPoint(0, 0), map.getLevel());
+                }
+            }
+
+            function clearDirectionGraphics() {
+                directionsList.innerHTML = "";
+                map.graphics.clearAll(true);
+            }
+
+            function setMessage(msg) {
+                var element = document.getElementById("message");
+                element.innerHTML = msg;
+            }
+
+            function setSelected(button) {
+                var elements = document.getElementsByClassName('button');
+                for (var i = 0; i &lt; elements.length; i++) {
+                    setStyle(elements[i], "button");
+                }
+                button.className = "button selected";
+            }
+
+            function setStyle(element, className) {
+                element.className = className;
+            }
+
+            dojo.addOnLoad(init);
+        &lt;/script>
+ 
+    &lt;/head>
+    &lt;body>
+        &lt;div id="mapDiv">&lt;/div>
+        &lt;div class="infoPanel">&lt;span class="infoLabel">Directions&lt;/span>&lt;ol id="directionsList" class="infoList">&lt;/ol>&lt;/div>
+        &lt;div id="bottomPanel">
+            &lt;div id="messagePanel">&lt;span id="message" class="infoLabel">Click a button and then add route points&lt;/span>&lt;/div>
+            &lt;div id="buttonPanel">
+               &lt;div id="groupPanel"> 
+                &lt;button class="btn" id="addStart" onclick="setActiveTool(this);">Add Start&lt;/button>
+                &lt;button class="btn" id="addStop" onclick="setActiveTool(this);">Add Stop&lt;/button>
+                &lt;button class="btn" id="clear" onclick="clearDirectionGraphics(); setActiveTool(this);">Clear&lt;/button>
+              &lt;/div>
+            &lt;/div>
+        &lt;/div>
+        &lt;div id="progress" class="progress hidden">&lt;img alt="" src="../assets/img/progress.gif"/>&lt;/div>
+    &lt;/body>
+&lt;/html>
+</pre>
+</div>
+<!--Cloud Code-->
+<div id="cloudCode" class="code-window hide">
+<pre class="brush: js; highlight: [1,20,44,45,46,47,48,49,50,51,80,89,90,91,92];">
+&lt;!--Cloud-->
+&lt;html>
+    &lt;head>
+        &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        &lt;title>Esri Javascript Quick Start&lt;/title>
+        &lt;link rel="stylesheet" href="esriquickstart.css" />
+        &lt;script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.1compact">&lt;/script>
+        &lt;script type="text/javascript" src="../src/esriquickstart.js">&lt;/script>
+  
+        &lt;script type="text/javascript">
+            var map;
+            var geometryService;
+
+            function init() {
+                // Create map
+                map = new esri.Map("mapDiv", { basemap: esri.arcgisonline.basemaps.STREETS });
+                map.centerAtLatLon(35, -95, 3);
+                map.addListener("onClick", onClickSelectByDistanceCallback);
+                // Create geoservice
+                geometryService = esriqs.arcgisonline.GeometryService();
+            }
+
+            var graphicsLayer;
+            var featureLayer;
+
+            function setActiveTool(ctrl) {
+                setMessage("Click the map to search by distance");
+            }
+
+            function loadLayers() {
+                // Cloud feature service
+                if (graphicsLayer && featureLayer) {
+                    map.centerAtLatLon(35, -95, 4);
+                    return;
+                }
+
+                setStyle("progress", "in-progress visible");
+
+                // Add graphics layer for search circle
+                graphicsLayer = new esri.layers.GraphicsLayer();
+                map.addLayer(graphicsLayer);
+
+                // Add feature layer
+                featureLayer = new esri.layers.FeatureLayer("http://services.arcgis.com/oKgs2tbjK6zwTdvi/arcgis/rest/services/Major_World_Cities/FeatureServer/0", {
+                    mode: esri.layers.FeatureLayer.MODE_ONDEMAND,
+                    outFields: ["*"],
+                    opacity: .90,
+                    infoTemplate: new esri.InfoTemplate("Feature Attributes", "${*}")
+                });
+                featureLayer.setDefinitionExpression("");
+                featureLayer.renderer = new esri.renderer.SimpleRenderer(map.defaultSymbols.Geolocation);
+
+                map.addLayer(featureLayer);
+
+                // Zoom
+                map.centerAtLatLon(35, -95, 4);
+
+                setStyle("progress", "in-progress hide");
+            }
+
+            function searchBySQL() {
+                if (!graphicsLayer || !featureLayer)
+                    return;
+
+                var sql = document.getElementById('sqlInput').value;
+                featureLayer.setDefinitionExpression(sql);
+            }
+
+            function onClickSelectByDistanceCallback(evt) {
+                if (!graphicsLayer || !featureLayer)
+                    return;
+
+                setStyle("progress", "in-progress visible");
+
+                var options = { point: evt.mapPoint,
+                    distance: document.getElementById('searchByDistanceInput').value,
+                    units: esri.tasks.GeometryService.UNIT_STATUTE_MILE
+                }
+                // Get search circle and select features
+                map.geoServices.getCircle(options, function (geometries) {
+                    if (geometries.length > 0) {
+                        var area = geometries[0];
+                        graphicsLayer.removeByAttribute("ID", "SEARCHAREA");
+                        var options = { title: "Search Circle", content: "Points: " + (area.rings[0].length - 1), attributes: { "ID": "SEARCHAREA"} };
+                        graphicsLayer.addPolygon(area, options);
+
+                        //featureLayer.setDefinitionExpression("");  // Show all
+
+                        var query = new esri.tasks.Query();  // Select by shape
+                        query.geometry = area;
+                        featureLayer.setSelectionSymbol(map.defaultSymbols.Stop);
+                        featureLayer.selectFeatures(query, esri.layers.FeatureLayer.SELECTION_NEW);
+                    }
+                    setStyle("progress", "in-progress hide");
+                },
+                    function (err) {
+                        console.log(Error);
+                        setStyle("progress", "in-progress hide");
+                    });
+            }
+
+            function selectAll() {
+                loadLayers();
+                featureLayer.setDefinitionExpression("");
+            }
+
+            function clearCloudGraphics() {
+                if (!graphicsLayer || !featureLayer) return;
+
+                featureLayer.setDefinitionExpression("1=0");
+                featureLayer.selectFeatures(null, esri.layers.FeatureLayer.SELECTION_NEW);
+
+                graphicsLayer.clear();
+                setActiveTool("clear");
+
+                setStyle("progress", "in-progress hide");
+            }
+
+
+            function setMessage(msg) {
+                var element = document.getElementById("message");
+                element.innerHTML = msg;
+            }
+
+            function setStyle(element, className) {
+                element.className = className;
+            }
+
+            dojo.addOnLoad(init);	
+	&lt;/script>
+
+&lt;/head>
+&lt;body>
+    &lt;div id="mapDiv">&lt;/div>
+        &lt;div id="bottomPanel">
+            &lt;div id="messagePanel">&lt;span id="message">Add data and then choose a search type&lt;/span>&lt;/div>
+            &lt;div id="buttonPanel"> 
+                &lt;div id="groupPanel">
+                &lt;div id="inputControls">
+                      &lt;button class="btn" id="addData" onclick="selectAll();">Add Data&lt;/button>
+                      &lt;label>SQL:&lt;input id="sqlInput" class="textInput" type="text" value="COUNTRY like 'US'"/>&lt;/label>
+                      &lt;button class="btn" id="sqlSearch" onclick="searchBySQL();">SQL Search&lt;/button>
+                      &lt;label>Distance:
+                             &lt;select id="Select1" class="selectInput" value="500" size="0">
+                                  &lt;option>10&lt;/option>
+                                  &lt;option>100&lt;/option>
+                                  &lt;option selected="selected">500&lt;/option>
+                                  &lt;option>1000&lt;/option>
+                            &lt;/select>
+                        &lt;/label>
+                        &lt;button class="btn" id="searchByDistance" onclick="setActiveTool(this);">Search on map&lt;/button>
+                        &lt;button class="btn btn-clear" id="clear" onclick="clearCloudGraphics();">Clear&lt;/button>
+                    &lt;/div>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+        &lt;div id="progress" class="progress hidden">&lt;img alt="" src="../assets/img/progress.gif"/>&lt;/div>
+    &lt;/body>
+&lt;/html>
+</pre>
+</div>
+
+            </div><!--span12-->
+        </div><!--row-->
+      <hr/>
+
+      <!--footer>
+        <p>&copy; Company 2012</p>
+      </footer-->
+
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/javascript" src="../assets/js/jquery.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-transition.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-alert.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-modal.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-dropdown.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-scrollspy.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-tab.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-tooltip.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-popover.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-button.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-collapse.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-carousel.js"></script>
+    <script type="text/javascript" src="../assets/js/bootstrap-typeahead.js"></script>
+
+	<script type="text/javascript">
+	    SyntaxHighlighter.all();
+	</script>
+
+  </body>
+</html>

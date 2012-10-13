@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+		<meta name="description" content="Quick Start JS"/>
+		<meta name="author" content="Allan Laframboise"/>
+        <title>Graphics</title>
+        <link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.2/js/esri/css/esri.css" />
+        <link rel="stylesheet" href="samples.css" />
+        <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2compact"></script>
+        <script type="text/javascript" src="../src/esriquickstart.js"></script>
+
+        <script type="text/javascript">
+            var map;
+            function init() {
+                // Create map
+                map = new esri.Map("mapDiv", { basemap: esri.arcgisonline.basemaps.STREETS });
+                map.centerAtLatLon(43.55, -79.4, 3);
+                // Connect listeners
+                map.addListener("onClick", addGraphicCallback);
+                map.addListener("onDblClick", addGraphicCallback);
+            }
+
+            var pts;
+            var activeToolId;
+
+            function setActiveTool(ctrl) {
+                activeToolId = ctrl.id;
+                clearAddGraphics(true);
+                // Lock map to digitize
+                if (activeToolId == "clear")
+                    map.enableDoubleClickZoom();
+                else
+                    map.disableDoubleClickZoom();
+
+                // Set user message
+                switch (activeToolId) {
+                    case "addPoint":
+                        setMessage("Click the map to draw a point");
+                        break;
+                    case "addLine":
+                        setMessage("Click the map to draw a line. Double-click to finish.");
+                        break;
+                    case "addPolygon":
+                        setMessage("Click the map to draw a polygon. Double-click to finish.");
+                        break;
+                    default:
+                        setMessage("Click a button to start");
+                }
+
+                //setSelected(ctrl);
+            }
+
+            // Listen for mouse click events
+            function addGraphicCallback(evt) {
+                var pt = evt.mapPoint;
+                clearAddGraphics(false);
+
+                var finished = (evt.type == "dblclick" || evt.type == "touchend");
+                switch (activeToolId) {
+                    case 'addPoint':
+                        addPoint(pt, finished);
+                        break;
+                    case 'addLine':
+                        addLine(pt, finished);
+                        break;
+                    case 'addPolygon':
+                        addPolygon(pt, finished);
+                        break;
+                    default:
+                }
+            }
+
+            // Add point graphic
+            function addPoint(pt, finished) {
+                var options = { title: "Point", content: "Latitude: " + pt.getLatitude(5) + "</br>Longitude: " + pt.getLongitude(5), attributes: { "ID": "myPoint"} };
+                map.graphics.addPoint(pt, options);
+            }
+
+            // Add line graphic
+            function addLine(pt, finished) {
+                if (!pts) pts = [];
+                pts.push(pt);
+                map.graphics.addPoint(pt, { attributes: { "ID": "temp"} });
+                if (pts.length > 1) {
+                    var options = { title: "Line", content: "Points: " + pts.length, attributes: { "ID": "myLine" }};
+                    map.graphics.addLine(pts, options );
+                }
+                if (finished) {
+                    map.graphics.removeByAttribute("ID", "temp");
+                    pts = null;
+                }
+            }
+
+            // Add polygon graphic
+            function addPolygon(pt, finished) {
+                if (!pts) pts = [];
+                if (pt) {
+                    pts.push(pt);
+                    map.graphics.addPoint(pt, { attributes: { "ID": "temp"} });
+                }
+                if (pts.length > 1)
+                    map.graphics.addPolygon(pts, {attributes: { "ID": "myPolygon" }});
+                if (finished) {
+                    if (pts.length > 2) {
+                        pts.push(pts[0]);
+                        var options = {title:"Polygon", content:"Points: " + (pts.length - 1), attributes:{ "ID": "myPolygon" }}
+                        map.graphics.addPolygon(pts, options);
+                    }
+                    map.graphics.removeByAttribute("ID", "temp");
+                    pts = null;
+                }
+            }
+
+            function clearAddGraphics(clearTemp) {
+                map.graphics.removeByAttribute("ID", "myPoint");
+                map.graphics.removeByAttribute("ID", "myLine");
+                map.graphics.removeByAttribute("ID", "myPolygon");
+
+                map.infoWindow.hide();
+
+                if (clearTemp) {
+                    map.graphics.removeByAttribute("ID", "temp");
+                    pts = null;
+                }
+            }
+
+            function setMessage(msg) {
+                var element = document.getElementById("message");
+                element.innerHTML = msg;
+            } 
+            
+            function setSelected(button) {
+                var elements = document.getElementsByClassName('button');
+                for (var i = 0; i < elements.length; i++) {
+                    setStyle(elements[i], "button");
+                }
+                button.className = "button selected";
+            }
+
+            function setStyle(element, className) {
+                element.className = className;
+            }
+
+            dojo.addOnLoad(init);
+        </script>
+    </head>
+    <body>
+       <div id="mapDiv"></div>
+        <div id="bottomPanel">
+           <div id="messagePanel"><span id="message">Click a button to start</span></div>
+           <div id="buttonPanel">
+               <div id="groupPanel"> 
+                    <button class="btn btn-primary" id="addPoint" onclick="setActiveTool(this);">Add Point</button>
+                    <button class="btn btn-primary" id="addLine" onclick="setActiveTool(this);">Add Line</button>
+                    <button class="btn btn-primary" id="addPolygon" onclick="setActiveTool(this);">Add Polygon</button>
+                    <button class="btn" id="clear" onclick="setActiveTool(this);">Clear</button>
+               </div>
+            </div>
+        </div>
+    </body>
+</html>
