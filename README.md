@@ -1,12 +1,13 @@
-# [Quick Start JS](http://edn1.esri.com/quickstartjs/demo/landingpage.html)
+# Quick Start JS
 
 A library and set of samples to help you get started with Esri's Javascript API.  No dojo or GIS knowledge required.  Just reference and roll!  Current samples: Basemaps, Geolocation, Graphics, Places, Directions, Cloud, [yours!]...
 
 [View live app here](http://edn1.esri.com/quickstartjs/demo/landingpage.html)
 
-* Source: [https://github.com/h5bp/html5-boilerplate](https://github.com/h5bp/html5-boilerplate)
-* Homepage: [http://html5boilerplate.com](http://html5boilerplate.com)
-* Twitter: [@h5bp](http://twitter.com/h5bp)
+* Source: [https://github.com/Esri/quickstart-js](https://github.com/Esri/quickstart-js)
+* Homepage: [http://esri.github.com/](http://esri.github.com/)
+* Esri: [@esri](http://twitter.com/esri)
+* Blog: [ArcGIS](http://blogs.esri.com/esri/arcgis/)
 
 ## Features
 * Simplifies development with the ArcGIS JavaScript API.
@@ -29,11 +30,11 @@ A library and set of samples to help you get started with Esri's Javascript API.
 
 3. Go!
 
-## Documentation
+## Resources
 
-[ArcGIS for JavaScript API Reference](http://help.arcgis.com/en/webapi/javascript/arcgis/help/jsapi_start.htm)
-[ArcGIS for JavaScript API Samples](http://help.arcgis.com/en/webapi/javascript/arcgis/help/jssamples_start.htm)
-[ArcGIS for JavaScript API Resource Center](http://help.arcgis.com/en/webapi/javascript/arcgis/index.html)
+* [ArcGIS for JavaScript API Reference](http://help.arcgis.com/en/webapi/javascript/arcgis/help/jsapi_start.htm)
+* [ArcGIS for JavaScript API Samples](http://help.arcgis.com/en/webapi/javascript/arcgis/help/jssamples_start.htm)
+* [ArcGIS for JavaScript API Resource Center](http://help.arcgis.com/en/webapi/javascript/arcgis/index.html)
 
 ## Requirements
 
