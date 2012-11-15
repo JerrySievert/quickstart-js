@@ -1,6 +1,6 @@
 # Quick Start JS
 
-An ArcGIS Javscript library and samples to help you build web mapping applications quickly.  No dojo or GIS knowledge required.  Just reference and roll!  Current samples: Basemaps, Geolocation, Graphics, Places, Directions, Cloud, [yours!]...
+An ArcGIS Javscript library and samples to help you build web mapping applications quickly.  The library simplifies a number of basic tasks such as loading and centering basemaps, and provides higher-level calls to a number of ArcGIS Online services.  No dojo or GIS knowledge required.  Bootstrap is used to layout and style the applications.  
 
 [View live app here](http://edn1.esri.com/quickstartjs/demo/landingpage.html)
 
@@ -19,6 +19,8 @@ An ArcGIS Javscript library and samples to help you build web mapping applicatio
 * no spatial references required, auto-projects geometries
 * easily add points, lines and polygons graphics with custom popups 
 * easier access to ArcGIS Online geoservices 
+
+* Current samples: Basemaps, Geolocation, Graphics, Places, Directions, Cloud, [yours!]...
 
 ## Instructions
 
