@@ -10,15 +10,15 @@ An ArcGIS Javscript library and samples to help you build web mapping applicatio
 * Blog: [ArcGIS](http://blogs.esri.com/esri/arcgis/)
 
 ## Features
-* Simplifies development with the ArcGIS JavaScript API.
-* hook map events without dojo.connect
-* auto-wire onLoad() callbacks for all graphics and zoom functions
-* new options in contructor to center, zoom and set basemap
-* easily access and swap ArcGIS Online basemap layers (without REST endpoints) 
-* use of lat/lon coordinates instead of extents
-* no spatial references required, auto-projects geometries
-* easily add points, lines and polygons graphics with custom popups 
-* easier access to ArcGIS Online geoservices 
+* Simplifies development with the ArcGIS JavaScript API
+* No dojo programming skills required
+* Auto-wires callbacks for all graphics and zoom functions
+* New options in contructor to center, zoom and set basemap
+* Easily access gallery of ArcGIS Online basemap layers (without REST endpoints) 
+* Use lat/lon coordinates instead of extents
+* No spatial references required, auto-projects geometries
+* Easily add point, line and polygon graphics and add custom popups 
+* Easily access and call ArcGIS Online geoservices 
 
 * Current samples: Basemaps, Geolocation, Graphics, Places, Directions, Cloud, [yours!]...
 
