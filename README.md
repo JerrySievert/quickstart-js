@@ -47,10 +47,6 @@ A library and set of samples to help you get started with Esri's Javascript API.
 
 Find a bug or want to request a new feature?  Please let us know by submitting an issue.
 
-## Authors
-
-[alaframboise](https://github.com/alaframboise)
-
 ## Contributing
 
 Anyone and everyone is welcome to contribute. 
