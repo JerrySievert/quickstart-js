@@ -10,7 +10,7 @@ Requirements
 
 * Little background with Javascript
 * Experience with the [ArcGIS Javascript API](http://www.esri.com/) would help.
-* If you want to get fancy, check out the [Bootstrap](http://twitter.github.com/bootstrap) to make your app look nice and be responsive.
+* If you want to get fancy, check out [Bootstrap](http://twitter.github.com/bootstrap) to make your app look pretty and be responsive.
 
 How To Use
 ----------
