@@ -9,12 +9,13 @@ Requirements
 ------------
 
 * Little background with Javascript
-* [Experience with the ArcGIS Javascript API would help] (http://www.esri.com/)
+* Experience with the [ArcGIS Javascript API] would help (http://www.esri.com/)
+* If you want to get fancy, check out the [Bootstrap] to make your app look nice and be responsive.(http://twitter.github.com/bootstrap)
 
 How To Use
 ----------
 
-1. Download and unzip .zip.
+1. Download and unzip the .zip file.
 2. Add the js library in your .html file after the ArcGIS reference.
 
         <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2compact"></script>
