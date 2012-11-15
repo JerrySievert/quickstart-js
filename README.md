@@ -1,6 +1,6 @@
 # Quick Start JS
 
-A library and set of samples to help you get started with Esri's Javascript API.  No dojo or GIS knowledge required.  Just reference and roll!  Current samples: Basemaps, Geolocation, Graphics, Places, Directions, Cloud, [yours!]...
+An ArcGIS Javscript library and samples to help you build web mapping applications quickly.  No dojo or GIS knowledge required.  Just reference and roll!  Current samples: Basemaps, Geolocation, Graphics, Places, Directions, Cloud, [yours!]...
 
 [View live app here](http://edn1.esri.com/quickstartjs/demo/landingpage.html)
 
