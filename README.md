@@ -17,7 +17,7 @@ How To Use
 1. Download and unzip .zip.
 2. Add the js library in your .html file after the ArcGIS reference.
 
-    <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2compact"></script>
+        <script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=3.2compact"></script>
 
 3. Go!
 
