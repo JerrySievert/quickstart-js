@@ -30,18 +30,18 @@ A library and set of samples to help you get started with Esri's Javascript API.
 
 3. Go!
 
-## Resources
-
-* [ArcGIS for JavaScript API Reference](http://help.arcgis.com/en/webapi/javascript/arcgis/help/jsapi_start.htm)
-* [ArcGIS for JavaScript API Samples](http://help.arcgis.com/en/webapi/javascript/arcgis/help/jssamples_start.htm)
-* [ArcGIS for JavaScript API Resource Center](http://help.arcgis.com/en/webapi/javascript/arcgis/index.html)
-
 ## Requirements
 
 * Notepad or HTML editor
 * A little background with Javascript
 * Experience with the [ArcGIS Javascript API](http://www.esri.com/) would help.
 * If you want to get fancy, check out [Bootstrap](http://twitter.github.com/bootstrap) to make your app look pretty and be responsive.
+
+## Resources
+
+* [ArcGIS for JavaScript API Reference](http://help.arcgis.com/en/webapi/javascript/arcgis/help/jsapi_start.htm)
+* [ArcGIS for JavaScript API Samples](http://help.arcgis.com/en/webapi/javascript/arcgis/help/jssamples_start.htm)
+* [ArcGIS for JavaScript API Resource Center](http://help.arcgis.com/en/webapi/javascript/arcgis/index.html)
 
 ## Issues
 
