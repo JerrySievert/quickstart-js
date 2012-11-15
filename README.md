@@ -5,6 +5,12 @@ A library and samples for getting started with Esri's Javascript API.  No dojo o
 
 [View live app here](http://edn1.esri.com/quickstartjs/demo/landingpage.html)
 
+Requirements
+------------
+
+* Little background with Javascript
+* [Experience with the ArcGIS Javascript API would help] (http://www.esri.com/)
+
 How To Use
 ----------
 
@@ -13,13 +19,6 @@ How To Use
 
 
 3. Go!
-
-
-Requirements
-------------
-
-* Little background with Javascript
-* [Experience with the ArcGIS Javascript API would help] (http://www.esri.com/)
 
 License
 ------------
